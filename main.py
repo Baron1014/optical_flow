@@ -6,21 +6,24 @@ def main(img_path, next_img, output_name):
     img = cv2.imread(img_path)
     next_i = cv2.imread(next_img)
 
-    # Parameters for lucas kanade optical flow
-    lk_params = dict(winSize  = (15, 15),
-                    maxLevel = 2,
-                    criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
-    
     # Take first frame and find corners in it
     old_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     print("Click on the screen and press any key for end process")
     p0 = get_points(img)
+    for i in range(len(p0)):
+        cv2.circle(img, (int(p0[i][0,0]), int(p0[i][0,1])), 3, (255,0,0), -1)
+    save_image(img, f"{output_name}_bluepoint", "data/")
+    
     
     # Create a mask image for drawing purposes
     mask = np.zeros_like(img)
 
     # calculate optical flow
     frame_gray = cv2.cvtColor(next_i, cv2.COLOR_BGR2GRAY)
+    # Parameters for lucas kanade optical flow
+    lk_params = dict(winSize  = (15, 15),
+                    maxLevel = 2,
+                    criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
     p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **lk_params)
 
     # Select good points
@@ -32,13 +35,12 @@ def main(img_path, next_img, output_name):
     for i, (new, old) in enumerate(zip(good_new, good_old)):
         a, b = new.ravel()
         c, d = old.ravel()       
-        mask = cv2.line(mask, (int(a), int(b)), (int(c), int(d)), (255,0,255), 2)
-        old = cv2.circle(next_i, (int(c), int(d)), 3, (255,0,0), -1)
-        next = cv2.circle(next_i, (int(a), int(b)), 3, (0,255,0), -1)
-    output = cv2.add(mask, next, old)
+        cv2.circle(next_i, (int(c), int(d)), 3, (255,0,0), -1) #old
+        cv2.circle(next_i, (int(a), int(b)), 3, (0,255,0), -1) # new
+        cv2.line(next_i, (int(a), int(b)), (int(c), int(d)), (255,0,255), 2)
 
     # save
-    save_image(output, output_name, "data/")
+    save_image(next_i, f"{output_name}_track", "data/")
 
 
 def save_image(fig, figname, report_path):
@@ -83,5 +85,5 @@ def mouse_handler(event, x, y, flags, data):
 
 
 if __name__=="__main__":
-    main("data/Cup0.jpg", "data/Cup1.jpg", "Cup_track")
-    main("data/Pillow0.jpg", "data/Pillow1.jpg", "Pillow_track")
+    main("data/Cup0.jpg", "data/Cup1.jpg", "Cup")
+    main("data/Pillow0.jpg", "data/Pillow1.jpg", "Pillow")
