@@ -1,11 +1,10 @@
 # Lucas-Kanade Flow
 ## Mark feature points
-    - BearCup
-    ![](data/Cup_bluepoint.jpg)
-    - DogPillow 
-    ![](data/Pillow_bluepoint.jpg)
+   <p float="left">
+     <img src="data/Cup_bluepoint.jpg" width=400/> <img src="data/Pillow_bluepoint.jpg" width=400/>
+   </p>
+   
 ## Calculate Optical Flow
-    - BearCup
-    ![](data/Cup_track.jpg)
-    - DogPillow 
-    ![](data/Pillow_track.jpg)
+   <p float="left">
+     <img src="data/Cup_track.jpg" width=400/> <img src="data/Pillow_track.jpg" width=400/>
+   </p>
