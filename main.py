@@ -60,21 +60,21 @@ def get_points(img):
     data['img'] = img.copy()
     data['points'] = list()
 
-    # 建立一個window
+    # create a window
     cv2.namedWindow("Image", 0)
 
-    # 改變Window為適當大小
+    # resize the Window
     h, w, dim = img.shape
     print(f"Img height, width:({h}, {w})")
     cv2.resizeWindow('Image', w, h)
 
-    # 顯示圖片至window
+    # show image of window
     cv2.imshow("Image", img)
 
-    # 利用滑鼠回傳值，資料皆保存於data dict中
+    # Use the mouse to return the value, the data is all stored in the dict.
     cv2.setMouseCallback("Image", mouse_handler, data)
 
-    # 按下任意鍵釋放opencv資源
+    # release opencv resource
     cv2.waitKey()
     cv2.destroyAllWindows()
 
@@ -82,13 +82,13 @@ def get_points(img):
 
 def mouse_handler(event, x, y, flags, data):
     if event == cv2.EVENT_LBUTTONDOWN:
-        # 標記點位置
+        # marked point position
         cv2.circle(data['img'], (x,y), 1, (255,0,0), 5, 16)
 
-        #改變顯示內容
+        # title
         cv2.imshow("Image", data['img'])
 
-        # 顯示(x,y)並儲存到list中
+        # show (x,y) and store it to list
         print(f"get point: [x,y] = [{x}, {y}]")
         data["points"].append(np.array([[x,y]], dtype='float32'))
 
